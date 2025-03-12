@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: ./backend  # ระบุ path ของ backend ที่มี Dockerfile
+    container_name: django_backend
+    volumes:
+      - ./backend:/app  # เชื่อมโยงโฟลเดอร์ backend ของเครื่องกับ container
+      - ./db:/app/db  # เก็บไฟล์ฐานข้อมูล SQLite ในโฟลเดอร์ db ของเครื่อง
+    ports:
+      - "8000:8000"  # เชื่อมโยงพอร์ต 8000 ของ container กับเครื่อง
+    environment:
+      - DEBUG=True
+    depends_on:
+      - frontend  # รอให้ frontend พร้อมก่อน
+
+  frontend:
+    build:
+      context: ./frontend  # ระบุ path ของ frontend ที่มี Dockerfile
+    container_name: vue_frontend
+    volumes:
+      - ./frontend:/app  # เชื่อมโยงโฟลเดอร์ frontend ของเครื่องกับ container
+    ports:
+      - "8080:8080"  # เชื่อมโยงพอร์ต 8080 ของ container กับเครื่อง
+
